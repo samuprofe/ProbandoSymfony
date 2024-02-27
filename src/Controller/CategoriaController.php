@@ -20,5 +20,28 @@ class CategoriaController extends AbstractController
         ]);
     }
 
-    
+    #[Route('/categoria/add', name: 'addCategoria')]
+    public function addCategoria(EntityManagerInterface $entityManager): Response
+    {
+        $categoria =new Categoria();
+        $categoria->setNombre('Televisiones');
+        $categoria->setDescripcion('Las mejores televisiones y más baratas');
+
+        $entityManager->persist($categoria);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('categorias');
+        
+    }
+
+    #[Route('/categoria/delete/{id}', name: 'deleteCategoria')]
+    public function deleteCategoria(Categoria $categoria, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($categoria);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('categorias');
+        
+    }
+ 
 }

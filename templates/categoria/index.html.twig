@@ -12,7 +12,10 @@
     <h1>Hello World! ✅</h1>
 
     {% for categoria in categorias %}
-        <div> <a href="{{path('verArticulosPorCategoria',{id: categoria.id}) }}">{{ categoria.nombre }}</div>
+        <div> <a href="{{path('verArticulosPorCategoria',{id: categoria.id}) }}">{{ categoria.nombre }} 
+        <a href="{{path('deleteCategoria',{id: categoria.id}) }}">(borrar)</a></div>
     {% endfor %}
 </div>
+
+<a href="{{path('addCategoria')}}">Nueva categoria</a>
 {% endblock %}

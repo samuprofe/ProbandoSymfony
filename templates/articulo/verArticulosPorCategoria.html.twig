@@ -15,6 +15,7 @@
         <div> <a href="{{path('verArticulo',{id: articulo.id}) }}">{{ articulo.nombre }}</div>
     {% endfor %}
     <br>
-    <a href="{{path("categorias")}}">Volver</a>
+    <a href="{{path("categorias")}}">Volver</a><br>
+    <a href="{{path("addArticulo",{id:categoria.id})}}">Añadir artículo a la categoría</a>
 </div>
 {% endblock %}

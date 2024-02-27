@@ -7,7 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Articulo;
 use App\Entity\Categoria;
+use App\Form\ArticuloType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class ArticuloController extends AbstractController
 {
@@ -35,5 +37,30 @@ class ArticuloController extends AbstractController
         return $this->render('articulo/verArticulosPorCategoria.html.twig', [
             'categoria' => $categoria
         ]);
+    }
+
+    #[Route('/articulo/add/{id}', name: 'addArticulo')]
+    public function addArticulo(EntityManagerInterface $entityManager, Request $request, int $id): Response
+    {
+        
+        $articulo =new Articulo();
+        
+        $formularioArticulo = $this->createForm(ArticuloType::class, $articulo);
+
+        $formularioArticulo->handleRequest($request);
+        if ($formularioArticulo->isSubmitted() && $formularioArticulo->isValid()) {
+            
+            $articulo = $formularioArticulo->getData();
+   
+            $entityManager->persist($articulo);
+            $entityManager->flush();
+   
+            return $this->redirectToRoute('verArticulosPorCategoria',['id' => $id]);
+           }
+
+
+        return $this->render('articulo/addArticulo.html.twig', ['formularioArticulo'=>$formularioArticulo]);
+
+        
     }
 }

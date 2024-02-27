@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Articulo;
+use App\Entity\Categoria;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ArticuloController extends AbstractController
@@ -22,9 +23,17 @@ class ArticuloController extends AbstractController
     public function index(EntityManagerInterface $entityManager): Response
     {
         $articulos = $entityManager->getRepository(Articulo::class)->findAll();
-        
+
         return $this->render('articulo/index.html.twig', [
             'articulos' => $articulos
+        ]);
+    }
+
+    #[Route('/articulos/categoria/{id}', name: 'verArticulosPorCategoria')]
+    public function verArticulosPorCategoria(Categoria $categoria): Response
+    {
+        return $this->render('articulo/verArticulosPorCategoria.html.twig', [
+            'categoria' => $categoria
         ]);
     }
 }

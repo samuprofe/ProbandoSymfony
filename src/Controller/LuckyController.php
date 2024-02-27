@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class LuckyController extends AbstractController
 {
-    #[Route('/', name: "principal")]
+    #[Route('/lucky', name: "principal")]
     public function number(): Response
     {
 

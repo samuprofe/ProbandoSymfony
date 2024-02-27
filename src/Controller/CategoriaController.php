@@ -8,6 +8,11 @@ use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Categoria;
 use App\Entity\Articulo;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
+
 
 class CategoriaController extends AbstractController
 {
@@ -21,16 +26,31 @@ class CategoriaController extends AbstractController
     }
 
     #[Route('/categoria/add', name: 'addCategoria')]
-    public function addCategoria(EntityManagerInterface $entityManager): Response
+    public function addCategoria(EntityManagerInterface $entityManager, Request $request): Response
     {
+        
         $categoria =new Categoria();
-        $categoria->setNombre('Televisiones');
-        $categoria->setDescripcion('Las mejores televisiones y más baratas');
+        $formularioCategoria = $this->createFormBuilder($categoria)
+           ->add('nombre',TextType::class)
+           ->add('descripcion',TextareaType::class)
+           ->add('Insertar',SubmitType::class, ['label'=>'Insertar'])
+           ->getForm();
 
-        $entityManager->persist($categoria);
-        $entityManager->flush();
 
-        return $this->redirectToRoute('categorias');
+        $formularioCategoria->handleRequest($request);
+        if ($formularioCategoria->isSubmitted() && $formularioCategoria->isValid()) {
+            
+            $categoria = $formularioCategoria->getData();
+   
+            $entityManager->persist($categoria);
+            $entityManager->flush();
+   
+            return $this->redirectToRoute('categorias');
+           }
+
+
+        return $this->render('categoria/addCategoria.html.twig', ['formularioCategoria'=>$formularioCategoria]);
+
         
     }
 

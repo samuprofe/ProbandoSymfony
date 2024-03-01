@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 class CategoriaController extends AbstractController
@@ -25,6 +26,7 @@ class CategoriaController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER', message: 'You are not allowed to access the admin dashboard.')]
     #[Route('/categoria/add', name: 'addCategoria')]
     public function addCategoria(EntityManagerInterface $entityManager, Request $request): Response
     {
